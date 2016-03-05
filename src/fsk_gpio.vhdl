@@ -2,8 +2,8 @@ library IEEE;
 use IEEE.std_logic_1164.all;
 use IEEE.numeric_std.all;
 
-library OSVVM ;
-    use OSVVM.AlertLogPkg.all;
+--library OSVVM ;
+--    use OSVVM.AlertLogPkg.all;
 
 library work;
 
@@ -20,7 +20,7 @@ entity fsk_gpio is
     );
 end fsk_gpio;
 
-architecture struct of fsk_gpio is
+architecture behaviour of fsk_gpio is
 
 -- Constants
 
@@ -29,7 +29,7 @@ architecture struct of fsk_gpio is
 
 begin
 
-    port0 <= '1' when (output_en = '1') else '0';
+    port0 <= '1' when (output_en = '1') else '1';
     port1 <= '1' when (output_en = '1') else '0';
     port2 <= '0' when (output_en = '1') else '0';
     port3 <= '0' when (output_en = '1') else '0';
@@ -38,9 +38,9 @@ begin
 	begin
 		if (reset_n = '0') then
 			output_en <= '0';
-            Log(ALERTLOG_BASE_ID, "Reset", FINAL);
+            --Log(ALERTLOG_BASE_ID, "Reset", FINAL);
 		elsif rising_edge(clk) then
-            Log(ALERTLOG_BASE_ID, "Rising clk", FINAL);
+            --Log(ALERTLOG_BASE_ID, "Rising clk", FINAL);
 			if (enable = '1') then
                 output_en <= '1';
 			end if;
@@ -62,4 +62,4 @@ begin
     --    end if;
 	--end process output;
 
-end architecture struct;
+end architecture behaviour;

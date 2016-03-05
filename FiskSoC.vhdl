@@ -27,8 +27,10 @@ architecture ppl_type of FiskSoC is
 -- Constants
 
 -- Signals
-    signal clk      : std_logic;
-    signal reset_n  : std_logic;
+    signal clk          : std_logic;
+    signal reset_n      : std_logic;
+    signal gpio1_input  : std_logic_vector(1 downto 0)  := "00";
+    signal gpio1_enable : std_logic                     := '0';
 
 begin
 -- {ALTERA_INSTANTIATION_BEGIN} DO NOT REMOVE THIS LINE!
@@ -38,10 +40,18 @@ begin
     port map (
         reset_n     => reset_n,
         clk         => clk,
+        input       => gpio1_input,
+        enable      => gpio1_enable,
         port0       => LEDR(0),
         port1       => LEDR(1),
         port2       => LEDR(2),
         port3       => LEDR(3)
+    );
+
+    c_timer1 : entity work.fsk_timer
+    port map (
+        reset_n     => reset_n,
+        clk         => clk
     );
 
     clk <= CLOCK_50;
