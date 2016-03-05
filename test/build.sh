@@ -33,6 +33,7 @@ function compile {
 }
 
 function run {
+    echo "running"
     ghdl -r fsk_gpio_tb
 }
 
