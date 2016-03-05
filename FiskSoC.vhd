@@ -18,7 +18,7 @@ use ieee.std_logic_1164.all;
 library altera;
 use altera.altera_syn_attributes.all;
 
-entity fsk_top_def is
+entity FiskSoC is
 	port
 	(
 -- {ALTERA_IO_BEGIN} DO NOT REMOVE THIS LINE!
@@ -30,9 +30,9 @@ entity fsk_top_def is
 
 -- {ALTERA_ATTRIBUTE_BEGIN} DO NOT REMOVE THIS LINE!
 -- {ALTERA_ATTRIBUTE_END} DO NOT REMOVE THIS LINE!
-end fsk_top_def;
+end FiskSoC;
 
-architecture ppl_type of fsk_top_def is
+architecture ppl_type of FiskSoC is
 
 -- {ALTERA_COMPONENTS_BEGIN} DO NOT REMOVE THIS LINE!
 -- {ALTERA_COMPONENTS_END} DO NOT REMOVE THIS LINE!
