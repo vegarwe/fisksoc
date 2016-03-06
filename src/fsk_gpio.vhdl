@@ -1,22 +1,15 @@
 library IEEE;
-use IEEE.std_logic_1164.all;
-use IEEE.numeric_std.all;
-
---library OSVVM ;
---    use OSVVM.AlertLogPkg.all;
-
-library work;
+    use IEEE.std_logic_1164.all;
+    use IEEE.numeric_std.all;
 
 entity fsk_gpio is
     port (
         reset_n     : in    std_logic;
         clk         : in    std_logic;
-        input       : in    std_logic_vector(1 downto 0);
-        enable      : in    std_logic;
-        port0       : out   std_logic;
-        port1       : out   std_logic;
-        port2       : out   std_logic;
-        port3       : out   std_logic
+        cnf_load    : in    std_logic                       := '0';
+        cnf_dir_set : in    std_logic_vector(3 downto 0)    := "0000";
+        cnf_out_set : in    std_logic_vector(3 downto 0)    := "0000";
+        pin_port    : out   std_logic_vector(3 downto 0)
     );
 end fsk_gpio;
 
@@ -25,41 +18,27 @@ architecture behaviour of fsk_gpio is
 -- Constants
 
 -- Signals
-	signal output_en    : std_logic := '0';
+    signal port_cnf : std_logic_vector(3 downto 0)  := "0000";
+    signal port_out : std_logic_vector(3 downto 0)  := "0000";
 
 begin
 
-    port0 <= '1' when (output_en = '1') else '1';
-    port1 <= '1' when (output_en = '1') else '0';
-    port2 <= '0' when (output_en = '1') else '0';
-    port3 <= '0' when (output_en = '1') else '0';
+    pin_port(0) <= port_out(0) when (port_cnf(0) = '1') else '0';
+    pin_port(1) <= port_out(1) when (port_cnf(1) = '1') else '0';
+    pin_port(2) <= port_out(2) when (port_cnf(2) = '1') else '0';
+    pin_port(3) <= port_out(3) when (port_cnf(3) = '1') else '0';
 
-	config : process (reset_n, clk) is
-	begin
-		if (reset_n = '0') then
-			output_en <= '0';
-            --Log(ALERTLOG_BASE_ID, "Reset", FINAL);
-		elsif rising_edge(clk) then
-            --Log(ALERTLOG_BASE_ID, "Rising clk", FINAL);
-			if (enable = '1') then
-                output_en <= '1';
-			end if;
-		end if;
-	end process config;
-
-	--output : process is
-    --begin
-    --    if output_en = '1' then
-    --        port0 <= '1';
-    --        port1 <= '0';
-    --        port2 <= '1';
-    --        port3 <= '0';
-    --    else
-    --        port0 <= '0';
-    --        port1 <= '0';
-    --        port2 <= '0';
-    --        port3 <= '0';
-    --    end if;
-	--end process output;
+    config : process (reset_n, clk) is
+    begin
+        if (reset_n = '0') then
+            port_cnf <= "0000";
+            port_out <= "0000";
+        elsif rising_edge(clk) then
+            if (cnf_load = '1') then
+                port_cnf <= cnf_dir_set;
+            end if;
+            port_out <= cnf_out_set;
+        end if;
+    end process config;
 
 end architecture behaviour;

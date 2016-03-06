@@ -27,10 +27,12 @@ architecture ppl_type of FiskSoC is
 -- Constants
 
 -- Signals
-    signal clk          : std_logic;
-    signal reset_n      : std_logic;
-    signal gpio1_input  : std_logic_vector(1 downto 0)  := "00";
-    signal gpio1_enable : std_logic                     := '0';
+    signal clk                  : std_logic;
+    signal reset_n              : std_logic;
+    signal gpio1_cnf_load       : std_logic;
+    signal gpio1_cnf_dir_set    : std_logic_vector(3 downto 0);
+    signal gpio1_cnf_out_set    : std_logic_vector(3 downto 0);
+    signal gpio1_pin_port       : std_logic_vector(3 downto 0);
 
 begin
 -- {ALTERA_INSTANTIATION_BEGIN} DO NOT REMOVE THIS LINE!
@@ -40,12 +42,10 @@ begin
     port map (
         reset_n     => reset_n,
         clk         => clk,
-        input       => gpio1_input,
-        enable      => gpio1_enable,
-        port0       => LEDR(0),
-        port1       => LEDR(1),
-        port2       => LEDR(2),
-        port3       => LEDR(3)
+        cnf_load    => gpio1_cnf_load,
+        cnf_dir_set => gpio1_cnf_dir_set,
+        cnf_out_set => gpio1_cnf_out_set,
+        pin_port    => LEDR(0 to 3)
     );
 
     c_timer1 : entity work.fsk_timer
@@ -53,6 +53,21 @@ begin
         reset_n     => reset_n,
         clk         => clk
     );
+
+    initial : process (reset_n, clk) is
+        variable setup : std_logic := '0';
+    begin
+        if (reset_n = '0') then
+            setup := '0';
+        elsif rising_edge(clk) then
+            if (setup = '0') then
+                setup := '1';
+                gpio1_cnf_load      <= '1';
+                gpio1_cnf_dir_set   <= "0010";
+                gpio1_cnf_out_set   <= "0010";
+            end if;
+        end if;
+    end process initial;
 
     clk <= CLOCK_50;
     reset_n <= KEY;

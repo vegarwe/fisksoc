@@ -27,7 +27,7 @@ function build_OSVVM {
 
 function compile {
     mkdir -p work
-    ghdl -a --workdir=work --std=08 --ieee=standard -Posvvm ../fsk_gpio.vhdl
+    ghdl -a --workdir=work --std=08 --ieee=standard -Posvvm ../src/fsk_gpio.vhdl
     ghdl -a --workdir=work --std=08 --ieee=standard -Posvvm fsk_gpio_tb.vhdl
     ghdl -e --workdir=work --std=08 --ieee=standard -Posvvm fsk_gpio_tb
 }
