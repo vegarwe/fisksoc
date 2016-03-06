@@ -30,11 +30,16 @@ function compile {
     ghdl -a --workdir=work --std=08 --ieee=standard -Posvvm ../src/fsk_gpio.vhdl
     ghdl -a --workdir=work --std=08 --ieee=standard -Posvvm fsk_gpio_tb.vhdl
     ghdl -e --workdir=work --std=08 --ieee=standard -Posvvm fsk_gpio_tb
+
+    ghdl -a --workdir=work --std=08 --ieee=standard -Posvvm ../src/fsk_timer.vhdl
+    ghdl -a --workdir=work --std=08 --ieee=standard -Posvvm fsk_timer_tb.vhdl
+    ghdl -e --workdir=work --std=08 --ieee=standard -Posvvm fsk_timer_tb
 }
 
-function run {
+function run_test {
     echo "running"
     ghdl -r fsk_gpio_tb
+    ghdl -r fsk_timer_tb
 }
 
 function wave {
@@ -48,5 +53,5 @@ cd `dirname $0`
 clean
 #build_OSVVM
 compile
-run
+run_test
 #wave
